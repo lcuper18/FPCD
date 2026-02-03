@@ -1,0 +1,62 @@
+# Archivos de Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Django
+*.log
+db.sqlite3
+/media/
+/staticfiles/
+.env
+.env.local
+
+# Node (si hay frontend con npm)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Documentación temporal
+*.md.bak
+temp/
+tmp/
+
+# Tests
+htmlcov/
+.pytest_cache/
+
+# Misc
+.env.example
+VERIFICACION.md
+CHECKLIST.md
