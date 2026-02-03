@@ -1,0 +1,181 @@
+:root {
+    --primary-color: #4A90E2;
+    --secondary-color: #6B9F7F;
+    --accent-color: #D4AF37;
+    --dark-color: #2C3E50;
+    --light-color: #F8F9FA;
+    --font-heading: 'Merriweather', serif;
+    --font-body: 'Open Sans', sans-serif;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--dark-color);
+    line-height: 1.7;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" opacity="0.1"><path fill="%23ffffff" d="M0,0 L1200,0 L1200,60 Q900,100 600,60 T0,60 Z"/></svg>');
+    background-size: cover;
+}
+
+/* Background Gradient */
+.bg-gradient {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
+/* Cards */
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
+}
+
+.devotional-card {
+    border-left: 4px solid var(--primary-color);
+}
+
+/* Bible Verse Box */
+.bible-verse {
+    border-left: 4px solid var(--accent-color);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #357ABD;
+    border-color: #357ABD;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+}
+
+/* Footer */
+footer a {
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+footer a:hover {
+    color: var(--accent-color) !important;
+}
+
+/* Devotional Content */
+.devotional-content {
+    font-size: 1.1rem;
+    line-height: 1.9;
+}
+
+.devotional-content p {
+    margin-bottom: 1.5rem;
+}
+
+/* Comments */
+.comment-item {
+    border-left: 3px solid var(--light-color);
+    padding-left: 1rem;
+}
+
+/* Responsive Images */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Utilities */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-warning {
+    color: var(--accent-color) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+/* Search Bar */
+.search-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Category Badge */
+.category-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: var(--secondary-color);
+    color: white;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    text-decoration: none;
+}
+
+.category-badge:hover {
+    background-color: #5a8a6f;
+    color: white;
+}
+
+/* Pagination */
+.pagination .page-link {
+    color: var(--primary-color);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+/* Loading Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 3rem 0 !important;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.75rem;
+    }
+}

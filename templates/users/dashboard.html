@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h1>Dashboard de Colaborador</h1>
+            <p class="text-muted">Bienvenido, {{ user.full_name }}</p>
+        </div>
+        <div class="col-auto">
+            <a href="/admin/" class="btn btn-primary" target="_blank">
+                <i class="bi bi-gear"></i> Ir al Admin
+            </a>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-book"></i> Crear Devocional</h5>
+                    <p class="card-text">Publica un nuevo devocional</p>
+                    <a href="/admin/devotionals/devotional/add/" class="btn btn-light btn-sm" target="_blank">Crear Ahora</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-file-earmark-text"></i> Gestionar Materiales</h5>
+                    <p class="card-text">Administra recursos cristianos</p>
+                    <a href="/admin/materials/material/" class="btn btn-light btn-sm" target="_blank">Ver Materiales</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-envelope"></i> Newsletter</h5>
+                    <p class="card-text">Gestiona suscriptores y campañas</p>
+                    <a href="/admin/newsletter/subscriber/" class="btn btn-light btn-sm" target="_blank">Ver Suscriptores</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Accesos Rápidos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="/admin/devotionals/devotional/" class="list-group-item list-group-item-action" target="_blank">
+                            <i class="bi bi-list-ul"></i> Ver todos los devocionales
+                        </a>
+                        <a href="/admin/devotionals/comment/" class="list-group-item list-group-item-action" target="_blank">
+                            <i class="bi bi-chat-dots"></i> Moderar comentarios
+                        </a>
+                        <a href="/admin/devotionals/category/" class="list-group-item list-group-item-action" target="_blank">
+                            <i class="bi bi-tags"></i> Gestionar categorías
+                        </a>
+                        <a href="/admin/users/customuser/" class="list-group-item list-group-item-action" target="_blank">
+                            <i class="bi bi-people"></i> Ver usuarios
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

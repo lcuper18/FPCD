@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ site_name }} - Una palabra de esperanza para cada día{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-gradient text-white py-5">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1 class="display-4 fw-bold mb-3">Fe para Cada Día</h1>
+                <p class="lead mb-4">Una palabra de esperanza para cada día</p>
+                <p class="mb-4">
+                    Descubre cómo la Palabra de Dios puede transformar tu día a día con devocionales, 
+                    reflexiones bíblicas y contenido que fortalece tu caminar con Cristo.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    {% if youtube_url %}
+                        <a href="{{ youtube_url }}" target="_blank" class="btn btn-light btn-lg">
+                            <i class="bi bi-youtube"></i> Suscríbete
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'newsletter:subscribe' %}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-envelope"></i> Newsletter
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="card bg-white bg-opacity-10 border-0 text-white p-4">
+                    <div class="card-body">
+                        <i class="bi bi-book display-1 mb-3"></i>
+                        <h5>Devocional de Hoy</h5>
+                        <p class="small">{{ today|date:"d \d\e F \d\e Y" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Today's Devotional -->
+{% if today_devotional %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Devocional de Hoy</h2>
+            <p class="text-muted">{{ today|date:"l, d \d\e F \d\e Y" }}</p>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0 devotional-card">
+                    {% if today_devotional.featured_image %}
+                        <img src="{{ today_devotional.featured_image.url }}" class="card-img-top" alt="{{ today_devotional.title }}">
+                    {% endif %}
+                    <div class="card-body p-4">
+                        <div class="badge bg-primary mb-3">Hoy</div>
+                        <h3 class="card-title mb-3">{{ today_devotional.title }}</h3>
+                        
+                        <div class="bible-verse bg-light p-4 rounded mb-4">
+                            <p class="fst-italic mb-2">"{{ today_devotional.bible_verse }}"</p>
+                            <p class="text-warning fw-bold mb-0">— {{ today_devotional.bible_reference }}</p>
+                        </div>
+                        
+                        <div class="devotional-content">
+                            {{ today_devotional.content|safe|truncatewords_html:100 }}
+                        </div>
+                        
+                        <a href="{% url 'devotionals:detail' today_devotional.slug %}" class="btn btn-primary mt-3">
+                            Leer Completo <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Recent Devotionals -->
+{% if recent_devotionals %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="fw-bold text-center mb-5">Devocionales Recientes</h2>
+        <div class="row g-4">
+            {% for devotional in recent_devotionals %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm hover-lift">
+                        {% if devotional.featured_image %}
+                            <img src="{{ devotional.featured_image.url }}" class="card-img-top" alt="{{ devotional.title }}" style="height: 200px; object-fit: cover;">
+                        {% endif %}
+                        <div class="card-body">
+                            <p class="text-muted small mb-2">
+                                <i class="bi bi-calendar"></i> {{ devotional.publish_date|date:"d/m/Y" }}
+                            </p>
+                            <h5 class="card-title">{{ devotional.title }}</h5>
+                            <p class="card-text text-muted small">{{ devotional.bible_reference }}</p>
+                            <a href="{% url 'devotionals:detail' devotional.slug %}" class="btn btn-sm btn-outline-primary">
+                                Leer <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'devotionals:list' %}" class="btn btn-primary">
+                Ver Todos los Devocionales
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Categories -->
+{% if categories %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="fw-bold text-center mb-5">Explora por Categoría</h2>
+        <div class="row g-3">
+            {% for category in categories %}
+                <div class="col-6 col-md-4 col-lg-3">
+                    <a href="{% url 'devotionals:category' category.slug %}" class="text-decoration-none">
+                        <div class="card text-center shadow-sm hover-lift h-100">
+                            <div class="card-body">
+                                <div class="fs-1 mb-2">{{ category.icon|default:"📖" }}</div>
+                                <h6 class="card-title mb-0">{{ category.name }}</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Newsletter CTA -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-3">Recibe Inspiración Diaria</h2>
+        <p class="lead mb-4">Suscríbete a nuestro newsletter y recibe devocionales en tu correo</p>
+        <a href="{% url 'newsletter:subscribe' %}" class="btn btn-light btn-lg">
+            <i class="bi bi-envelope-heart"></i> Suscribirme Ahora
+        </a>
+    </div>
+</section>
+{% endblock %}

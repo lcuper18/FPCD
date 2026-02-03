@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Registro - {{ site_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-person-plus-fill display-1 text-primary"></i>
+                        <h2 class="mt-3">Crear Cuenta</h2>
+                        <p class="text-muted">Únete a nuestra comunidad de fe</p>
+                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <p class="mb-0">¿Ya tienes cuenta? 
+                            <a href="{% url 'users:login' %}">Inicia sesión</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

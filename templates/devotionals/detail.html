@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ devotional.title }} - {{ site_name }}{% endblock %}
+
+{% block meta_description %}{{ devotional.bible_reference }}: {{ devotional.bible_verse|truncatewords:20 }}{% endblock %}
+
+{% block content %}
+<article class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'devotionals:home' %}">Inicio</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'devotionals:list' %}">Devocionales</a></li>
+                        <li class="breadcrumb-item active">{{ devotional.title }}</li>
+                    </ol>
+                </nav>
+
+                <!-- Article Header -->
+                <header class="mb-4">
+                    {% if devotional.category %}
+                        <a href="{% url 'devotionals:category' devotional.category.slug %}" class="category-badge">
+                            {{ devotional.category.name }}
+                        </a>
+                    {% endif %}
+                    
+                    <h1 class="mt-3 mb-3">{{ devotional.title }}</h1>
+                    
+                    {% if devotional.subtitle %}
+                        <p class="lead text-muted">{{ devotional.subtitle }}</p>
+                    {% endif %}
+                    
+                    <div class="d-flex align-items-center gap-3 text-muted small">
+                        <span><i class="bi bi-calendar"></i> {{ devotional.publish_date|date:"d/m/Y" }}</span>
+                        <span><i class="bi bi-person"></i> {{ devotional.author.full_name }}</span>
+                        <span><i class="bi bi-eye"></i> {{ devotional.views }} vistas</span>
+                    </div>
+                </header>
+
+                <!-- Featured Image -->
+                {% if devotional.featured_image %}
+                    <img src="{{ devotional.featured_image.url }}" class="img-fluid rounded shadow-sm mb-4" alt="{{ devotional.title }}">
+                {% endif %}
+
+                <!-- Bible Verse -->
+                <div class="bible-verse bg-light p-4 rounded shadow-sm mb-4">
+                    <h5 class="text-primary mb-3"><i class="bi bi-book"></i> Versículo del Día</h5>
+                    <p class="fst-italic fs-5 mb-3">"{{ devotional.bible_verse }}"</p>
+                    <p class="text-warning fw-bold mb-0">— {{ devotional.bible_reference }}</p>
+                </div>
+
+                <!-- Main Content -->
+                <div class="devotional-content mb-4">
+                    {{ devotional.content|safe }}
+                </div>
+
+                <!-- Reflection -->
+                {% if devotional.reflection %}
+                    <div class="card bg-light border-0 mb-4">
+                        <div class="card-body">
+                            <h5 class="text-primary mb-3"><i class="bi bi-lightbulb"></i> Reflexión</h5>
+                            {{ devotional.reflection|safe }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Prayer -->
+                {% if devotional.prayer %}
+                    <div class="card bg-primary text-white mb-4">
+                        <div class="card-body">
+                            <h5 class="mb-3"><i class="bi bi-heart"></i> Oración</h5>
+                            <p class="mb-0">{{ devotional.prayer }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Tags -->
+                {% if devotional.tag_list %}
+                    <div class="mb-4">
+                        <strong>Temas:</strong>
+                        {% for tag in devotional.tag_list %}
+                            <span class="badge bg-secondary">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Actions -->
+                <div class="d-flex gap-2 mb-5">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'devotionals:toggle_favorite' devotional.slug %}" class="btn btn-{% if is_favorite %}danger{% else %}outline-danger{% endif %}">
+                            <i class="bi bi-heart{% if is_favorite %}-fill{% endif %}"></i> 
+                            {% if is_favorite %}Quitar de {% endif %}Favoritos
+                        </a>
+                    {% endif %}
+                    
+                    <button class="btn btn-outline-primary" onclick="window.print()">
+                        <i class="bi bi-printer"></i> Imprimir
+                    </button>
+                    
+                    <div class="btn-group">
+                        <button class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="bi bi-share"></i> Compartir
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-facebook"></i> Facebook</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-twitter"></i> Twitter</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-whatsapp"></i> WhatsApp</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Comments Section -->
+                <section class="comments-section">
+                    <h4 class="mb-4"><i class="bi bi-chat-dots"></i> Comentarios ({{ comments.count }})</h4>
+                    
+                    {% if user.is_authenticated %}
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h6>Deja tu comentario</h6>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <textarea name="content" class="form-control mb-3" rows="3" placeholder="Comparte tu reflexión..." required></textarea>
+                                    <button type="submit" class="btn btn-primary">Enviar Comentario</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p class="alert alert-info">
+                            <a href="{% url 'users:login' %}">Inicia sesión</a> para dejar un comentario
+                        </p>
+                    {% endif %}
+                    
+                    {% for comment in comments %}
+                        <div class="comment-item mb-3 pb-3 border-bottom">
+                            <div class="d-flex gap-3">
+                                <div>
+                                    <i class="bi bi-person-circle fs-2 text-muted"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">{{ comment.user.full_name }}</h6>
+                                    <p class="text-muted small mb-2">{{ comment.created_at|date:"d/m/Y H:i" }}</p>
+                                    <p class="mb-0">{{ comment.content }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted">Sé el primero en comentar</p>
+                    {% endfor %}
+                </section>
+            </div>
+        </div>
+
+        <!-- Related Devotionals -->
+        {% if related_devotionals %}
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h4 class="mb-4">También te puede interesar</h4>
+                </div>
+                {% for related in related_devotionals %}
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm hover-lift">
+                            {% if related.featured_image %}
+                                <img src="{{ related.featured_image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                            {% endif %}
+                            <div class="card-body">
+                                <h6 class="card-title">{{ related.title }}</h6>
+                                <p class="text-muted small">{{ related.bible_reference }}</p>
+                                <a href="{% url 'devotionals:detail' related.slug %}" class="btn btn-sm btn-outline-primary">Leer</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</article>
+{% endblock %}
