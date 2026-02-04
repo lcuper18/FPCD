@@ -30,10 +30,10 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     
     # Local apps
-    'users.apps.UsersConfig',
-    'devotionals.apps.DevotionalsConfig',
-    'newsletter.apps.NewsletterConfig',
-    'materials.apps.MaterialsConfig',
+    'src.users.apps.UsersConfig',
+    'src.devotionals.apps.DevotionalsConfig',
+    'src.newsletter.apps.NewsletterConfig',
+    'src.materials.apps.MaterialsConfig',
 ]
 
 MIDDLEWARE = [

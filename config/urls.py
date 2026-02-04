@@ -8,10 +8,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('devotionals.urls')),
-    path('usuarios/', include('users.urls')),
-    path('newsletter/', include('newsletter.urls')),
-    path('materiales/', include('materials.urls')),
+    path('', include('src.devotionals.urls')),
+    path('usuarios/', include('src.users.urls')),
+    path('newsletter/', include('src.newsletter.urls')),
+    path('materiales/', include('src.materials.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
