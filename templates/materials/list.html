@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block title %}Materiales - Fe para Cada Día{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <h1 class="display-4 mb-3">📚 Materiales de Estudio</h1>
+            <p class="lead text-muted">Recursos para profundizar en tu fe</p>
+        </div>
+        <div class="col-lg-4">
+            <!-- Búsqueda -->
+            <form method="get" class="d-flex gap-2">
+                <input type="text" name="q" class="form-control" placeholder="Buscar materiales..."
+                    value="{{ request.GET.q }}">
+                <button type="submit" class="btn btn-primary">🔍</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Filtro por tipo -->
+    <div class="mb-4">
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{% url 'materials:list' %}" class="btn btn-outline-secondary btn-sm">
+                Todos
+            </a>
+            <a href="?type=estudio" class="btn btn-outline-secondary btn-sm {% if request.GET.type == 'estudio' %}active{% endif %}">
+                📖 Estudios
+            </a>
+            <a href="?type=guia" class="btn btn-outline-secondary btn-sm {% if request.GET.type == 'guia' %}active{% endif %}">
+                📋 Guías
+            </a>
+            <a href="?type=articulo" class="btn btn-outline-secondary btn-sm {% if request.GET.type == 'articulo' %}active{% endif %}">
+                ✍️ Artículos
+            </a>
+            <a href="?type=video" class="btn btn-outline-secondary btn-sm {% if request.GET.type == 'video' %}active{% endif %}">
+                🎥 Videos
+            </a>
+            <a href="?type=audio" class="btn btn-outline-secondary btn-sm {% if request.GET.type == 'audio' %}active{% endif %}">
+                🎙️ Audio
+            </a>
+            <a href="?type=ebook" class="btn btn-outline-secondary btn-sm {% if request.GET.type == 'ebook' %}active{% endif %}">
+                📱 eBooks
+            </a>
+        </div>
+    </div>
+
+    <!-- Materiales -->
+    <div class="row">
+        {% if materials %}
+            {% for material in materials %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm hover-shadow">
+                    <!-- Icono del tipo -->
+                    <div class="card-header bg-light border-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge bg-info">{{ material.get_material_type_display }}</span>
+                            {% if material.external_url %}
+                            <a href="{{ material.external_url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                🔗
+                            </a>
+                            {% elif material.file %}
+                            <a href="{{ material.file.url }}" class="btn btn-sm btn-outline-primary">
+                                📥
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card-body d-flex flex-column">
+                        <!-- Título -->
+                        <h5 class="card-title">{{ material.title }}</h5>
+
+                        <!-- Descripción -->
+                        {% if material.description %}
+                        <p class="card-text text-muted small flex-grow-1">
+                            {{ material.description|truncatewords:20 }}
+                        </p>
+                        {% endif %}
+
+                        <!-- Autor -->
+                        {% if material.author %}
+                        <p class="card-text small">
+                            <strong>Autor:</strong> {{ material.author }}
+                        </p>
+                        {% endif %}
+
+                        <!-- Meta -->
+                        <div class="mt-auto">
+                            <small class="text-muted">
+                                Publicado: {{ material.created_at|date:"d/m/Y" }}
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Footer con acciones -->
+                    <div class="card-footer bg-white border-top">
+                        <div class="d-flex gap-2">
+                            {% if material.external_url %}
+                            <a href="{{ material.external_url }}" target="_blank" class="btn btn-sm btn-primary flex-grow-1">
+                                Visitar →
+                            </a>
+                            {% elif material.file %}
+                            <a href="{{ material.file.url }}" class="btn btn-sm btn-primary flex-grow-1">
+                                Descargar
+                            </a>
+                            {% else %}
+                            <span class="btn btn-sm btn-secondary flex-grow-1 disabled">
+                                No disponible
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info text-center py-5">
+                <h4>📭 No hay materiales disponibles</h4>
+                <p class="text-muted">Intenta con otra búsqueda o vuelve más tarde</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Paginación -->
+    {% if is_paginated %}
+    <nav aria-label="Page navigation" class="mt-5">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1">Primero</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Último</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<style>
+    .hover-shadow {
+        transition: box-shadow 0.3s ease;
+    }
+
+    .hover-shadow:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .card {
+        border: none;
+    }
+</style>
+{% endblock %}

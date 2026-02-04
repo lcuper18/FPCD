@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}Devocionales - Fe para Cada Día{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8">
+            <h1 class="display-4 mb-3">📖 Devocionales Diarios</h1>
+            <p class="lead text-muted">Reflexiones cristianas para fortalecer tu fe</p>
+        </div>
+        <div class="col-lg-4">
+            <!-- Búsqueda -->
+            <form method="get" class="d-flex gap-2">
+                <input type="text" name="q" class="form-control" placeholder="Buscar devocionales..."
+                    value="{{ request.GET.q }}">
+                <button type="submit" class="btn btn-primary">🔍</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Filtro por categoría -->
+    {% if categories %}
+    <div class="mb-4">
+        <div class="d-flex flex-wrap gap-2">
+            <a href="{% url 'devotionals:list' %}" class="btn btn-outline-secondary btn-sm">
+                Todos
+            </a>
+            {% for category in categories %}
+            <a href="?category={{ category.slug }}"
+                class="btn btn-outline-secondary btn-sm {% if request.GET.category == category.slug %}active{% endif %}">
+                {{ category.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Devocionales -->
+    <div class="row">
+        {% if devotionals %}
+            {% for devotional in devotionals %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm hover-shadow">
+                    {% if devotional.featured_image %}
+                    <img src="{{ devotional.featured_image.url }}" class="card-img-top" alt="{{ devotional.title }}"
+                        style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
+                        style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <h3 class="text-white">📖</h3>
+                    </div>
+                    {% endif %}
+
+                    <div class="card-body d-flex flex-column">
+                        <!-- Categoría -->
+                        {% if devotional.category %}
+                        <span class="badge bg-primary mb-2" style="width: fit-content;">
+                            {{ devotional.category.name }}
+                        </span>
+                        {% endif %}
+
+                        <!-- Título -->
+                        <h5 class="card-title">{{ devotional.title }}</h5>
+
+                        <!-- Subtítulo -->
+                        {% if devotional.subtitle %}
+                        <p class="card-text text-muted small">{{ devotional.subtitle }}</p>
+                        {% endif %}
+
+                        <!-- Versículo -->
+                        {% if devotional.bible_verse %}
+                        <p class="card-text small text-primary">
+                            <strong>{{ devotional.bible_reference }}</strong>
+                        </p>
+                        {% endif %}
+
+                        <!-- Meta -->
+                        <div class="mt-auto">
+                            <small class="text-muted">
+                                {{ devotional.publish_date|date:"d/m/Y" }}
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Footer con botón -->
+                    <div class="card-footer bg-white border-top">
+                        <a href="{% url 'devotionals:detail' devotional.slug %}" class="btn btn-sm btn-outline-primary w-100">
+                            Leer más →
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info text-center py-5">
+                <h4>📭 No hay devocionales disponibles</h4>
+                <p class="text-muted">Intenta con otra búsqueda o vuelve más tarde</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Paginación -->
+    {% if is_paginated %}
+    <nav aria-label="Page navigation" class="mt-5">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1">Primero</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Último</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<style>
+    .hover-shadow {
+        transition: box-shadow 0.3s ease;
+    }
+
+    .hover-shadow:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .card {
+        border: none;
+    }
+</style>
+{% endblock %}

@@ -36,7 +36,7 @@ Dokploy te pedirá las variables de entorno. Aquí está la configuración:
 # Django
 DEBUG=False
 SECRET_KEY=django-insecure-tu-clave-secreta-50-caracteres
-ALLOWED_HOSTS=tu-dominio.com,www.tu-dominio.com,ip-vps.com
+ALLOWED_HOSTS=fecadadia.com,www.fecadadia.com,ip-vps.com
 
 # Base de Datos PostgreSQL
 DB_ENGINE=django.db.backends.postgresql
@@ -130,8 +130,8 @@ docker-compose -f docker-compose.yml up -d
 Una vez desplegada:
 
 ```
-🌐 Frontend: https://tu-dominio.com
-🔐 Admin: https://tu-dominio.com/admin
+🌐 Frontend: https://fecadadia.com
+🔐 Admin: https://fecadadia.com/admin
 ```
 
 ## 🛠️ Operaciones útiles en Dokploy
