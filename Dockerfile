@@ -22,8 +22,11 @@ COPY requirements.txt .
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
-# Copiar código de la aplicación
+# Copiar código de la aplicación (todo)
 COPY . .
+
+# Verificar estructura (debug)
+RUN ls -la /app/ && ls -la /app/config/ || true
 
 # Crear usuario no-root
 RUN useradd -m -u 1000 django && chown -R django:django /app
