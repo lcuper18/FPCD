@@ -145,25 +145,25 @@ print_header "PASO 3: MOVER DOCUMENTACIÓN"
 
 # Mover archivos .md principales a docs/
 echo "Moviendo archivos de documentación..."
-for file in README.md SETUP.md DEPLOYMENT.md DOCKER.md API.md ARCHITECTURE.md 2>/dev/null; do
+for file in README.md SETUP.md DEPLOYMENT.md DOCKER.md API.md ARCHITECTURE.md; do
     if [ -f "$file" ]; then
-        mv "$file" docs/ 2>/dev/null && print_step "Movido: $file → docs/"
+        mv "$file" docs/ && print_step "Movido: $file → docs/"
     fi
 done
 
 # Mover guías específicas
 echo "Moviendo guías..."
-for file in QUICKSTART.md GITHUB_SETUP.md DOKPLOY.md PASOS_FECADADIA.md DOMINIO_FECADADIA.md VERIFICATION.md 2>/dev/null; do
+for file in QUICKSTART.md GITHUB_SETUP.md DOKPLOY.md PASOS_FECADADIA.md DOMINIO_FECADADIA.md VERIFICATION.md; do
     if [ -f "$file" ]; then
-        mv "$file" docs/guides/ 2>/dev/null && print_step "Movido: $file → docs/guides/"
+        mv "$file" docs/guides/ && print_step "Movido: $file → docs/guides/"
     fi
 done
 
 # Mover notas de desarrollo
 echo "Moviendo notas de desarrollo..."
-for file in TRACKING.md TRACKING_v2.md CHECKLIST.md CHECKLIST_v2.md SUMMARY.md 2>/dev/null; do
+for file in TRACKING.md TRACKING_v2.md CHECKLIST.md CHECKLIST_v2.md SUMMARY.md; do
     if [ -f "$file" ]; then
-        mv "$file" docs/dev-notes/ 2>/dev/null && print_step "Movido: $file → docs/dev-notes/"
+        mv "$file" docs/dev-notes/ && print_step "Movido: $file → docs/dev-notes/"
     fi
 done
 
