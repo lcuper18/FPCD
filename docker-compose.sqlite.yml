@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # Servicio de aplicación Django con SQLite
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fpcd_web_dev
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 120"
+    environment:
+      DEBUG: "True"
+      SECRET_KEY: django-insecure-desarrollo-local-cambiar-en-produccion
+      ALLOWED_HOSTS: localhost,127.0.0.1,0.0.0.0
+      
+      # SQLite (más simple para desarrollo)
+      DB_ENGINE: django.db.backends.sqlite3
+      DB_NAME: /app/db.sqlite3
+      
+      # Email (consola por defecto en desarrollo)
+      EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend
+      
+    volumes:
+      - .:/app
+      - static_volume_dev:/app/staticfiles
+      - media_volume_dev:/app/media
+    ports:
+      - "8000:8000"
+    networks:
+      - fpcd_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  static_volume_dev:
+    driver: local
+  media_volume_dev:
+    driver: local
+
+networks:
+  fpcd_network:
+    driver: bridge
