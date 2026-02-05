@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  # Servicio de base de datos PostgreSQL
+  db:
+    image: postgres:16-alpine
+    container_name: fpcd_db
+    environment:
+      POSTGRES_DB: ${DB_NAME:-fpcd_db}
+      POSTGRES_USER: ${DB_USER:-admin_fpcd}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-Change@Me!}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-admin_fpcd}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - fpcd_network
+
+  # Servicio de aplicación Django
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: fpcd_web
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4 --timeout 120"
+    environment:
+      DEBUG: ${DEBUG:-False}
+      SECRET_KEY: ${SECRET_KEY:-django-insecure-change-me-in-production}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1,148.230.92.233}
+      
+      # PostgreSQL
+      DB_ENGINE: django.db.backends.postgresql
+      DB_NAME: ${DB_NAME:-fpcd_db}
+      DB_USER: ${DB_USER:-admin_fpcd}
+      DB_PASSWORD: ${DB_PASSWORD:-Change@Me!}
+      DB_HOST: db
+      DB_PORT: 5432
+      
+      # Email
+      EMAIL_BACKEND: ${EMAIL_BACKEND:-django.core.mail.backends.console.EmailBackend}
+      EMAIL_HOST: ${EMAIL_HOST:-smtp.gmail.com}
+      EMAIL_PORT: ${EMAIL_PORT:-587}
+      EMAIL_USE_TLS: ${EMAIL_USE_TLS:-True}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER:-}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:-}
+      
+    volumes:
+      - .:/app
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - fpcd_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  postgres_data:
+    driver: local
+  static_volume:
+    driver: local
+  media_volume:
+    driver: local
+
+networks:
+  fpcd_network:
+    driver: bridge
