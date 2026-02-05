@@ -25,8 +25,8 @@ services:
   # Servicio de aplicación Django
   web:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: docker/Dockerfile
     container_name: fpcd_web
     command: >
       sh -c "python manage.py migrate &&

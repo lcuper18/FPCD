@@ -4,8 +4,8 @@ services:
   # Servicio de aplicación Django con SQLite
   web:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: docker/Dockerfile
     container_name: fpcd_web_dev
     command: >
       sh -c "python manage.py migrate &&
@@ -24,7 +24,7 @@ services:
       EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend
       
     volumes:
-      - .:/app
+      - ..:/app
       - static_volume_dev:/app/staticfiles
       - media_volume_dev:/app/media
     ports:
