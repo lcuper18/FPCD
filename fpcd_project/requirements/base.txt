@@ -1,0 +1,24 @@
+# Django Core
+Django==5.0.1
+psycopg2-binary==2.9.9
+
+# Django Extensions
+django-environ==0.11.2
+django-crispy-forms==2.1
+crispy-tailwind==1.0.3
+
+# Editor de texto
+django-tinymce==4.0.0
+
+# Tagging
+django-taggit==5.0.1
+
+# Image processing
+Pillow==10.2.0
+
+# Tasks & Email
+celery==5.3.6
+redis==5.0.1
+
+# Utilities
+python-slugify==8.0.1

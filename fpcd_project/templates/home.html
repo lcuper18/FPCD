@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio - FPCD{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg shadow-lg p-12 text-center">
+        <h1 class="text-5xl font-bold mb-4">¡Bienvenido!</h1>
+        <p class="text-xl mb-6">Plataforma de Enseñanza Bíblica</p>
+        <div class="bg-white/20 backdrop-blur rounded-lg p-6 inline-block">
+            <p class="text-lg font-semibold">✅ Sprint 0 Completado</p>
+            <p class="text-sm mt-2">Entorno de desarrollo configurado correctamente</p>
+        </div>
+    </div>
+
+    <!-- Status Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">✅ Django 5.0.1</h3>
+            <p class="text-gray-600 text-sm">Framework instalado</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">✅ PostgreSQL 15</h3>
+            <p class="text-gray-600 text-sm">Base de datos activa</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">✅ TailwindCSS</h3>
+            <p class="text-gray-600 text-sm">Diseño responsive</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500">
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">✅ Redis</h3>
+            <p class="text-gray-600 text-sm">Cache y tareas</p>
+        </div>
+    </div>
+
+    <!-- Next Steps -->
+    <div class="bg-white rounded-lg shadow-md p-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Próximos Pasos</h2>
+        <ul class="space-y-3">
+            <li class="flex items-start">
+                <span class="text-2xl mr-3">🚀</span>
+                <div>
+                    <strong>Sprint 1:</strong> Sistema de Autenticación y Usuarios
+                    <p class="text-gray-600 text-sm">Crear modelo de usuario personalizado, login, registro</p>
+                </div>
+            </li>
+            <li class="flex items-start">
+                <span class="text-2xl mr-3">📝</span>
+                <div>
+                    <strong>Sprint 2:</strong> Gestión de Contenido
+                    <p class="text-gray-600 text-sm">CRUD de artículos, devocionales, estudios bíblicos</p>
+                </div>
+            </li>
+            <li class="flex items-start">
+                <span class="text-2xl mr-3">🔍</span>
+                <div>
+                    <strong>Sprint 3:</strong> Flujo de Revisión
+                    <p class="text-gray-600 text-sm">Estados, revisores, aprobaciones</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

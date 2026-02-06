@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: fpcd_postgres
+    environment:
+      POSTGRES_DB: fpcd_db
+      POSTGRES_USER: fpcd_user
+      POSTGRES_PASSWORD: fpcd_secure_password_2026
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - fpcd_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: fpcd_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - fpcd_network
+
+volumes:
+  postgres_data:
+
+networks:
+  fpcd_network:
+    driver: bridge

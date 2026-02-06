@@ -1,0 +1,7 @@
+-r base.txt
+
+# Production server
+gunicorn==21.2.0
+
+# Security
+django-cors-headers==4.3.1
