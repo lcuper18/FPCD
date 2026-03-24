@@ -55,8 +55,8 @@ services:
       - SECRET_KEY=${SECRET_KEY:-django-insecure-change-this-in-production}
       - DEBUG=False
       - ALLOWED_HOSTS=fecadadia.com,www.fecadadia.com,localhost
-    expose:
-      - "8000"
+    ports:
+      - "8000:8000"
     networks:
       - fpcd_network
     depends_on:
