@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Moderación de Comentarios" %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">{% trans "Moderación de Comentarios" %}</h1>
+    </div>
+
+    <!-- Stats cards -->
+    <div class="grid grid-cols-3 gap-4 mb-8">
+        <a href="?status=pending" 
+           class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center hover:bg-yellow-100 transition {% if status_filter == 'pending' %}ring-2 ring-yellow-400{% endif %}">
+            <div class="text-3xl font-bold text-yellow-600">{{ pending_count }}</div>
+            <div class="text-sm text-yellow-700 mt-1">{% trans "Pendientes" %}</div>
+        </a>
+        <a href="?status=approved" 
+           class="bg-green-50 border border-green-200 rounded-lg p-4 text-center hover:bg-green-100 transition {% if status_filter == 'approved' %}ring-2 ring-green-400{% endif %}">
+            <div class="text-3xl font-bold text-green-600">{{ approved_count }}</div>
+            <div class="text-sm text-green-700 mt-1">{% trans "Aprobados" %}</div>
+        </a>
+        <a href="?status=rejected" 
+           class="bg-red-50 border border-red-200 rounded-lg p-4 text-center hover:bg-red-100 transition {% if status_filter == 'rejected' %}ring-2 ring-red-400{% endif %}">
+            <div class="text-3xl font-bold text-red-600">{{ rejected_count }}</div>
+            <div class="text-sm text-red-700 mt-1">{% trans "Rechazados" %}</div>
+        </a>
+    </div>
+
+    <!-- Comments list -->
+    {% if comments %}
+    <div class="space-y-4">
+        {% for comment in comments %}
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 
+            {% if comment.status == 'pending' %}border-yellow-400
+            {% elif comment.status == 'approved' %}border-green-400
+            {% else %}border-red-400{% endif %}">
+
+            <!-- Header -->
+            <div class="flex items-start justify-between mb-3">
+                <div>
+                    <span class="font-bold text-gray-800">{{ comment.get_author_name }}</span>
+                    {% if comment.author %}
+                    <span class="text-gray-400 text-sm ml-2">({{ comment.author.email }})</span>
+                    {% else %}
+                    <span class="text-gray-400 text-sm ml-2">{{ comment.author_email }}</span>
+                    {% endif %}
+                    <span class="text-gray-500 text-sm ml-2">· {{ comment.created_at|timesince }} {% trans "atrás" %}</span>
+                    <span class="ml-2 px-2 py-0.5 text-xs rounded-full 
+                        {% if comment.status == 'pending' %}bg-yellow-100 text-yellow-800
+                        {% elif comment.status == 'approved' %}bg-green-100 text-green-800
+                        {% else %}bg-red-100 text-red-800{% endif %}">
+                        {{ comment.get_status_display }}
+                    </span>
+                </div>
+                <div class="text-xs text-gray-500">
+                    {{ comment.content_type }} #{{ comment.content_id }}
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="text-gray-700 mb-4 bg-gray-50 rounded p-3">
+                {{ comment.content|linebreaks }}
+            </div>
+
+            {% if comment.ip_address %}
+            <div class="text-xs text-gray-400 mb-3">IP: {{ comment.ip_address }}</div>
+            {% endif %}
+
+            <!-- Actions -->
+            <div class="flex gap-3">
+                {% if comment.status != 'approved' %}
+                <form method="post" action="{% url 'comments:approve' comment.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" 
+                            class="bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-1.5 px-4 rounded-lg transition">
+                        ✓ {% trans "Aprobar" %}
+                    </button>
+                </form>
+                {% endif %}
+
+                {% if comment.status != 'rejected' %}
+                <form method="post" action="{% url 'comments:reject' comment.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" 
+                            class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium py-1.5 px-4 rounded-lg transition">
+                        ✗ {% trans "Rechazar" %}
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div class="mt-8 flex justify-center gap-2">
+        {% if page_obj.has_previous %}
+        <a href="?status={{ status_filter }}&page={{ page_obj.previous_page_number }}" 
+           class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+            ← {% trans "Anterior" %}
+        </a>
+        {% endif %}
+        <span class="px-4 py-2 text-gray-600">
+            {% trans "Página" %} {{ page_obj.number }} {% trans "de" %} {{ page_obj.paginator.num_pages }}
+        </span>
+        {% if page_obj.has_next %}
+        <a href="?status={{ status_filter }}&page={{ page_obj.next_page_number }}" 
+           class="px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+            {% trans "Siguiente" %} →
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="text-center py-16">
+        <p class="text-gray-500 text-lg">
+            {% if status_filter == 'pending' %}
+                ✅ {% trans "No hay comentarios pendientes de moderación." %}
+            {% else %}
+                {% trans "No hay comentarios con este estado." %}
+            {% endif %}
+        </p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Auto-refresh AJAX para aprobación/rechazo sin recargar página -->
+<script>
+document.querySelectorAll('form[action*="approve"], form[action*="reject"]').forEach(form => {
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = form.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        
+        const response = await fetch(form.action, {
+            method: 'POST',
+            headers: {'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value},
+        });
+        
+        if (response.ok) {
+            const card = form.closest('.bg-white');
+            card.style.opacity = '0.4';
+            card.style.transition = 'opacity 0.5s';
+            setTimeout(() => card.remove(), 500);
+        } else {
+            btn.disabled = false;
+            alert('Error al procesar la acción.');
+        }
+    });
+});
+</script>
+{% endblock %}

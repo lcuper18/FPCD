@@ -70,5 +70,12 @@
             WhatsApp
         </a>
     </div>
+
+    <!-- Comments Section -->
+    <div class="mt-12 pt-8 border-t border-gray-200">
+        {% with content_type="Article" content_id=article.pk %}
+            {% include "comments/comment_list.html" with comments=article_comments %}
+        {% endwith %}
+    </div>
 </article>
 {% endblock %}

@@ -18,6 +18,7 @@ urlpatterns = [
     path("accounts/", include("apps.accounts.urls", namespace="accounts")),
     path("content/", include("apps.content.urls", namespace="content")),
     path("content/", include("apps.content.urls_public", namespace="public")),
+    path("comentarios/", include("apps.comments.urls")),
     path("workflow/", include("apps.workflow.urls", namespace="workflow")),
     path("media/", include("apps.media_manager.urls", namespace="media_manager")),
     # Root URL - provides 'home' for reverse()
@@ -30,8 +31,10 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
     # Django Debug Toolbar
-    import debug_toolbar
-
-    urlpatterns = [
-        path("__debug__/", include(debug_toolbar.urls)),
-    ] + urlpatterns
+    try:
+        import debug_toolbar
+        urlpatterns = [
+            path("__debug__/", include(debug_toolbar.urls)),
+        ] + urlpatterns
+    except ImportError:
+        pass

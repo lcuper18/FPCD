@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.views.generic import CreateView, ListView, View
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.db.models import Count
 from django.conf import settings
 
@@ -236,3 +236,35 @@ def get_comments_count(content_type, content_id):
         content_id=content_id,
         is_approved=True,
     ).count()
+
+
+class CommentModerationListView(LoginRequiredMixin, ListView):
+    """Vista de moderación de comentarios para revisores y admins."""
+
+    model = Comment
+    template_name = "comments/moderation.html"
+    context_object_name = "comments"
+    paginate_by = 25
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+        if not (request.user.is_reviewer() or request.user.is_admin()):
+            return HttpResponseForbidden("No tienes permisos para moderar comentarios.")
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        status_filter = self.request.GET.get("status", "pending")
+        qs = Comment.objects.select_related("author").order_by("-created_at")
+        if status_filter in [s[0] for s in CommentStatus.choices]:
+            qs = qs.filter(status=status_filter)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["status_filter"] = self.request.GET.get("status", "pending")
+        context["pending_count"] = Comment.objects.filter(status=CommentStatus.PENDING).count()
+        context["approved_count"] = Comment.objects.filter(status=CommentStatus.APPROVED).count()
+        context["rejected_count"] = Comment.objects.filter(status=CommentStatus.REJECTED).count()
+        context["status_choices"] = CommentStatus.choices
+        return context

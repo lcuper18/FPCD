@@ -16,6 +16,7 @@ from apps.content.models import (
     ContentStatus,
 )
 from apps.media_manager.models import MediaFile
+from apps.comments.models import Comment, CommentStatus
 
 
 class HomeView(TemplateView):
@@ -114,6 +115,14 @@ class ArticleDetailView(DetailView):
         ).exclude(pk=article.pk)[:3]
 
         context["page_title"] = article.title
+
+        # Comments for the article
+        context["article_comments"] = Comment.objects.filter(
+            content_type="Article",
+            content_id=article.pk,
+            is_approved=True,
+            parent__isnull=True,
+        ).select_related("author").prefetch_related("replies", "replies__author")
 
         return context
 
