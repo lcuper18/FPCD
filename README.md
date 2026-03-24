@@ -62,7 +62,7 @@ FPCD/
 ## 🚀 Estado Actual
 
 **Fecha**: Marzo 2026  
-**Sprint activo**: 6 — Sistema de Comentarios (50% completado)
+**Sprint activo**: 7 — Newsletter y Analytics
 
 | Sprint | Descripción | Estado |
 |--------|-------------|--------|
@@ -72,8 +72,8 @@ FPCD/
 | 3 | Flujo de revisión y notificaciones | ✅ Completado |
 | 4 | Gestión de multimedia | ✅ Completado |
 | 5 | Portal público (home, listados, búsqueda) | ✅ Completado |
-| 6 | Comentarios (modelo ✅, vistas/templates ⏳) | 🔄 En progreso |
-| 7 | Newsletter y Analytics | ⏳ Pendiente |
+| 6 | Comentarios (vistas, moderación, tests 13 ✅) | ✅ Completado |
+| 7 | Newsletter y Analytics | 🔄 En progreso |
 | 8 | Testing completo y deploy a Dokploy | ⏳ Pendiente |
 
 ## 💻 Acceso Local (Desarrollo)

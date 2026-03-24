@@ -4,7 +4,7 @@
 
 **Nombre del Proyecto:** Plataforma de Enseñanza Bíblica (FPCD)  
 **Fecha de Inicio:** 6 de Febrero, 2026  
-**Estado:** En desarrollo activo (Sprint 6)
+**Estado:** En desarrollo activo (Sprint 7)
 **Tecnologías:** Django 5.0.1, PostgreSQL 15 (Docker), Redis 7, Celery, TailwindCSS, TinyMCE
 
 ---
@@ -251,13 +251,14 @@ Utilizaremos un enfoque **iterativo e incremental**, dividiendo el desarrollo en
 - Buscador
 - Diseño responsive con TailwindCSS
 
-#### **Sprint 6: Funcionalidades Sociales 🔄 EN PROGRESO (50%)**
-- ✅ Modelo Comment + migraciones
-- ⏳ Vistas y templates de comentarios
-- ⏳ Moderación de comentarios
-- ⏳ Tests
+#### **Sprint 6: Funcionalidades Sociales ✅ COMPLETADO (Marzo 24, 2026)**
+- ✅ Modelo Comment + CommentVote + migraciones
+- ✅ Vistas y templates de comentarios (form.html, comment_list.html, moderation.html)
+- ✅ Moderación de comentarios (CommentModerationListView, AJAX approve/reject)
+- ✅ Detalle de artículo público con sección de comentarios
+- ✅ 13 tests de vistas (13/13 pasan)
 
-#### **Sprint 7: Newsletter y Estadísticas ⏳ PENDIENTE**
+#### **Sprint 7: Newsletter y Estadísticas 🔄 EN PROGRESO**
 - Sistema de suscripción
 - Envío de newsletters con Celery
 - Contador de visitas
