@@ -4,8 +4,8 @@
 
 **Nombre del Proyecto:** Plataforma de Enseñanza Bíblica (FPCD)  
 **Fecha de Inicio:** 6 de Febrero, 2026  
-**Estado:** Planificación  
-**Tecnologías:** Django, PostgreSQL (Docker), AWS S3/Storage Local
+**Estado:** En desarrollo activo (Sprint 6)
+**Tecnologías:** Django 5.0.1, PostgreSQL 15 (Docker), Redis 7, Celery, TailwindCSS, TinyMCE
 
 ---
 
@@ -214,62 +214,60 @@ Utilizaremos un enfoque **iterativo e incremental**, dividiendo el desarrollo en
 
 ### 4.2 Cronograma Estimado
 
-#### **Sprint 0: Preparación del Entorno (3-5 días)**
+#### **Sprint 0: Preparación del Entorno ✅ COMPLETADO (Feb 6, 2026)**
 - Configuración del entorno de desarrollo
 - Instalación de Django y dependencias
 - Configuración de Docker para PostgreSQL
 - Estructura inicial del proyecto
 - Control de versiones (Git)
 
-#### **Sprint 1: Base del Proyecto (1-2 semanas)**
-- Configuración de Django
-- Sistema de autenticación personalizado
-- Modelos base de usuarios y roles
-- Panel de administración básico
+#### **Sprint 1: Base del Proyecto ✅ COMPLETADO**
+- CustomUser con email login, 3 roles
+- Panel de administración
 - Templates base (layout, navbar, footer)
+- 13 vistas, 7 formularios, 63 tests unitarios
 
-#### **Sprint 2: Gestión de Contenido (2 semanas)**
-- Modelos de contenido (Artículo, Devocional, etc.)
-- CRUD de contenido para editores
-- Sistema de categorías y etiquetas
-- Editor de texto enriquecido
+#### **Sprint 2: Gestión de Contenido ✅ COMPLETADO**
+- Modelos: Artículo, Devocional, EstudioBiblico, BlogPost, Category
+- CRUD completo de contenido para editores
+- Sistema de categorías y etiquetas (django-taggit)
+- Editor de texto enriquecido TinyMCE
 
-#### **Sprint 3: Flujo de Revisión (1-2 semanas)**
-- Estados de publicación
-- Sistema de revisión
-- Notificaciones básicas
+#### **Sprint 3: Flujo de Revisión ✅ COMPLETADO**
+- Estaós de publicación
+- Sistema de revisión (Review, ContentSubmission)
+- Notificaciones automáticas
 - Dashboard para revisores
 
-#### **Sprint 4: Gestión de Multimedia (1 semana)**
-- Subida de imágenes
-- Biblioteca de medios
-- Optimización automática
-- Integración con contenido
+#### **Sprint 4: Gestión de Multimedia ✅ COMPLETADO**
+- Subida de imágenes y archivos
+- Biblioteca de medios con vista grid
+- MediaFile, MediaFolder con metadatos
 
-#### **Sprint 5: Portal Público (2 semanas)**
+#### **Sprint 5: Portal Público ✅ COMPLETADO**
 - Página de inicio
-- Listados de contenido
+- Listados de contenido por tipo y categoría
 - Vista de detalle
 - Buscador
-- Diseño responsive
+- Diseño responsive con TailwindCSS
 
-#### **Sprint 6: Funcionalidades Sociales (1-2 semanas)**
-- Sistema de comentarios
-- Botones de compartir en redes sociales
-- Meta tags para redes sociales
-- Moderación de comentarios
+#### **Sprint 6: Funcionalidades Sociales 🔄 EN PROGRESO (50%)**
+- ✅ Modelo Comment + migraciones
+- ⏳ Vistas y templates de comentarios
+- ⏳ Moderación de comentarios
+- ⏳ Tests
 
-#### **Sprint 7: Newsletter y Estadísticas (1-2 semanas)**
+#### **Sprint 7: Newsletter y Estadísticas ⏳ PENDIENTE**
 - Sistema de suscripción
-- Envío de newsletters
+- Envío de newsletters con Celery
 - Contador de visitas
 - Dashboard de estadísticas
 
-#### **Sprint 8: Pulido y Testing (1-2 semanas)**
-- Pruebas de funcionalidad completas
+#### **Sprint 8: Pulido y Testing ⏳ PENDIENTE**
+- Suite completa de tests
 - Corrección de bugs
 - Optimización de rendimiento
-- Documentación de usuario
+- Deploy a Dokploy (https://platform.kooperlab.cloud/)
 
 **DURACIÓN TOTAL ESTIMADA: 10-16 semanas**
 
@@ -362,4 +360,4 @@ Utilizaremos un enfoque **iterativo e incremental**, dividiendo el desarrollo en
 
 ---
 
-**Última actualización:** 6 de Febrero, 2026
+**Última actualización:** 24 de Marzo, 2026

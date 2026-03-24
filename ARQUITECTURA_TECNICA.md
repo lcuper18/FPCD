@@ -47,8 +47,9 @@ Internet
 │  │  Django Apps                     │ │
 │  │  ├── accounts                    │ │
 │  │  ├── content                     │ │
+│  │  ├── workflow                    │ │
 │  │  ├── media_manager               │ │
-│  │  └── workflow                    │ │
+│  │  └── comments                    │ │
 │  └──────────────────────────────────┘ │
 └────────┬───────────────────┬───────────┘
          │                   │
@@ -98,7 +99,7 @@ templates/
   - Tablet: 640px - 1024px
   - Desktop: > 1024px
 
-### Framework CSS (Propuesta: TailwindCSS)
+### Framework CSS: TailwindCSS
 
 **Ventajas**:
 - Utility-first
@@ -229,6 +230,26 @@ templates/
 - Aprobación/Rechazo
 - Comentarios de revisión
 - Notificaciones
+
+#### 5. **comments/** - Sistema de Comentarios
+
+```python
+# Modelos principales
+- Comment
+  - content_type: FK(ContentType)  # genérico
+  - object_id: PositiveIntegerField
+  - author: FK(User)
+  - body: TextField
+  - status: CharField (pending, approved, rejected)
+  - parent: FK('self', null=True)  # respuestas
+  - created_at, updated_at
+```
+
+**Funcionalidades** (50% completado):
+- ✅ Modelo y migraciones
+- ⏳ Vistas de comentarios y moderación
+- ⏳ Templates
+- ⏳ Tests
 
 ---
 
@@ -384,6 +405,16 @@ SECURE_BROWSER_XSS_FILTER = True
 - ✅ Fácil replicación de entornos
 - ✅ Deployment simplificado
 
+### ¿Por qué Redis + Celery?
+- ✅ Tareas asíncronas (emails, newsletters)
+- ✅ Ya configurado como broker en `base.py`
+- ✅ Redis también usado como cache
+
+### ¿Por qué Dokploy?
+- ✅ Gestión de contenedores Docker en VPS propio
+- ✅ SSL automático, dominios, backups
+- ✅ URL: `https://platform.kooperlab.cloud/`
+
 ---
 
-**Documento vivo - Se actualizará durante el desarrollo**
+**Documento vivo - Última actualización: 24 de Marzo, 2026**
