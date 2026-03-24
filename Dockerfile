@@ -34,9 +34,6 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 # Copy application code
 COPY fpcd_project/ ./fpcd_project/
-COPY static/ ./static/
-COPY media/ ./media/
-COPY templates/ ./templates/
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
