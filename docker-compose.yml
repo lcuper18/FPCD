@@ -3,7 +3,6 @@ version: '3.8'
 services:
   db:
     image: postgres:15-alpine
-    container_name: fpcd_postgres
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_NAME:-fpcd_db}
@@ -21,7 +20,6 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: fpcd_redis
     restart: unless-stopped
     volumes:
       - redis_data:/data
@@ -35,7 +33,6 @@ services:
 
   web:
     build: .
-    container_name: fpcd_web
     restart: unless-stopped
     command: >
       sh -c "python manage.py migrate &&
@@ -52,10 +49,11 @@ services:
       - DEBUG=False
       - ALLOWED_HOSTS=fecadadia.com,www.fecadadia.com,localhost
       - DJANGO_SETTINGS_MODULE=config.settings.production
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     networks:
       - fpcd_network
+      - dokploy-network
     depends_on:
       db:
         condition: service_healthy
@@ -69,3 +67,5 @@ volumes:
 networks:
   fpcd_network:
     driver: bridge
+  dokploy-network:
+    external: true
