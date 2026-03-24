@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Boletines anteriores | FPCD{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Boletines anteriores</h1>
+        <p class="mt-2 text-gray-600">Explora nuestro contenido pasado</p>
+    </div>
+    
+    <div class="grid gap-6">
+        {% for newsletter in newsletters %}
+        <div class="bg-white shadow rounded-lg p-6">
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-sm text-gray-500">{{ newsletter.sent_at|date:"d F, Y" }}</span>
+                <span class="text-sm text-gray-500">
+                    {{ newsletter.open_count }} aperturas
+                </span>
+            </div>
+            <h2 class="text-xl font-semibold text-gray-900 mb-2">
+                {{ newsletter.subject }}
+            </h2>
+            <div class="prose max-w-none text-gray-600">
+                {{ newsletter.content_html|safe|truncatewords:50 }}
+            </div>
+        </div>
+        {% empty %}
+        <div class="bg-white shadow rounded-lg p-8 text-center">
+            <p class="text-gray-500">No hay boletines disponibles aún.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

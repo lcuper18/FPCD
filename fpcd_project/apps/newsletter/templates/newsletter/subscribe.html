@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Suscribirse | FPCD{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="bg-white shadow rounded-lg p-8">
+        <div class="text-center mb-8">
+            <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 mb-4">
+                <svg class="h-8 w-8 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-900">Suscríbete al newsletter</h1>
+            <p class="mt-2 text-gray-600">
+                Recibe contenido bíblico directamente en tu correo
+            </p>
+        </div>
+        
+        <form method="post" id="subscribe-form">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+            <div class="mb-4 bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                {% for error in form.non_field_errors %}
+                <p class="text-sm text-red-700">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="space-y-4">
+                {{ form|crispy }}
+            </div>
+            
+            <div class="mt-6">
+                <button type="submit" 
+                    class="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition duration-200">
+                    Suscribirse
+                </button>
+            </div>
+        </form>
+        
+        <div class="mt-6 text-center text-sm text-gray-500">
+            <p>No spam, solo contenido de valor. Cancela cuando quieras.</p>
+            <a href="{% url 'newsletter:unsubscribe' %}" class="text-blue-600 hover:text-blue-800">
+                Cancelar suscripción
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

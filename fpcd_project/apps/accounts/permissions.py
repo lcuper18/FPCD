@@ -26,7 +26,7 @@ def role_required(allowed_roles):
 
             if request.user.role not in allowed_roles and not request.user.is_superuser:
                 messages.error(request, "No tienes permiso para acceder a esta página.")
-                return redirect("home")
+                return redirect("public:home")
 
             return view_func(request, *args, **kwargs)
 
@@ -47,7 +47,7 @@ def admin_required(view_func):
 
         if not (request.user.role == "admin" or request.user.is_superuser):
             messages.error(request, "Esta acción requiere permisos de administrador.")
-            return redirect("home")
+            return redirect("public:home")
 
         return view_func(request, *args, **kwargs)
 
@@ -69,7 +69,7 @@ def editor_required(view_func):
             and not request.user.is_superuser
         ):
             messages.error(request, "Esta acción es exclusiva para editores.")
-            return redirect("home")
+            return redirect("public:home")
 
         return view_func(request, *args, **kwargs)
 
@@ -91,7 +91,7 @@ def reviewer_required(view_func):
             and not request.user.is_superuser
         ):
             messages.error(request, "Esta acción es exclusiva para revisores.")
-            return redirect("home")
+            return redirect("public:home")
 
         return view_func(request, *args, **kwargs)
 
@@ -114,7 +114,7 @@ class RoleRequiredMixin:
             and not request.user.is_superuser
         ):
             messages.error(request, "No tienes permiso para acceder a esta página.")
-            return redirect("home")
+            return redirect("public:home")
 
         return super().dispatch(request, *args, **kwargs)
 

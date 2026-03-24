@@ -52,14 +52,11 @@ services:
       - DB_PASSWORD=${DB_PASSWORD:-fpcd_secure_password_2026}
       - DB_PORT=5432
       - REDIS_URL=redis://redis:6379/0
-      - SECRET_KEY=${SECRET_KEY}
+      - SECRET_KEY=${SECRET_KEY:-django-insecure-change-this-in-production}
       - DEBUG=False
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost}
-    volumes:
-      - static_files:/app/staticfiles
-      - media_files:/app/media
-    ports:
-      - "8000:8000"
+      - ALLOWED_HOSTS=fecadadia.com,www.fecadadia.com,localhost
+    expose:
+      - "8000"
     networks:
       - fpcd_network
     depends_on:
@@ -71,8 +68,6 @@ services:
 volumes:
   postgres_data:
   redis_data:
-  static_files:
-  media_files:
 
 networks:
   fpcd_network:

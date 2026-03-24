@@ -48,6 +48,8 @@ LOCAL_APPS = [
     "apps.workflow",
     "apps.media_manager",
     "apps.comments",
+    "apps.newsletter",
+    "apps.analytics",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -60,6 +62,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # Apps
+    "apps.analytics.middleware.AnalyticsMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
