@@ -11,8 +11,6 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-fpcd_secure_password_2026}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     networks:
       - fpcd_network
     healthcheck:
@@ -27,8 +25,6 @@ services:
     restart: unless-stopped
     volumes:
       - redis_data:/data
-    ports:
-      - "6379:6379"
     networks:
       - fpcd_network
     healthcheck:
@@ -52,9 +48,10 @@ services:
       - DB_PASSWORD=${DB_PASSWORD:-fpcd_secure_password_2026}
       - DB_PORT=5432
       - REDIS_URL=redis://redis:6379/0
-      - SECRET_KEY=${SECRET_KEY:-django-insecure-change-this-in-production}
+      - SECRET_KEY=${SECRET_KEY}
       - DEBUG=False
       - ALLOWED_HOSTS=fecadadia.com,www.fecadadia.com,localhost
+      - DJANGO_SETTINGS_MODULE=config.settings.production
     ports:
       - "8000:8000"
     networks:
