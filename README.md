@@ -48,12 +48,14 @@ FPCD/
     │   │   └── production.py
     │   ├── urls.py
     │   └── wsgi.py
-    ├── apps/
-    │   ├── accounts/        # Autenticación, roles, perfiles
-    │   ├── content/         # Artículos, devocionales, estudios, blogs
-    │   ├── workflow/        # Flujo de revisión y notificaciones
-    │   ├── media_manager/   # Gestión de archivos e imágenes
-    │   └── comments/        # Sistema de comentarios
+├── apps/
+│   ├── accounts/        # Autenticación, roles, perfiles
+│   ├── content/        # Artículos, devocionales, estudios, blogs
+│   ├── workflow/       # Flujo de revisión y notificaciones
+│   ├── media_manager/  # Gestión de archivos e imágenes
+│   ├── comments/       # Sistema de comentarios
+│   ├── newsletter/     # Suscripciones y boletines
+│   └── analytics/      # Estadísticas y visitas
     ├── templates/
     ├── static/
     └── media/
@@ -62,7 +64,7 @@ FPCD/
 ## 🚀 Estado Actual
 
 **Fecha**: Marzo 2026  
-**Sprint activo**: 7 — Newsletter y Analytics
+**Sprint activo**: 8 — Testing y Deploy (Completado)
 
 | Sprint | Descripción | Estado |
 |--------|-------------|--------|
@@ -72,9 +74,9 @@ FPCD/
 | 3 | Flujo de revisión y notificaciones | ✅ Completado |
 | 4 | Gestión de multimedia | ✅ Completado |
 | 5 | Portal público (home, listados, búsqueda) | ✅ Completado |
-| 6 | Comentarios (vistas, moderación, tests 13 ✅) | ✅ Completado |
-| 7 | Newsletter y Analytics | 🔄 En progreso |
-| 8 | Testing completo y deploy a Dokploy | ⏳ Pendiente |
+| 6 | Comentarios (vistas, moderación, 13 tests) | ✅ Completado |
+| 7 | Newsletter y Analytics (17 tests) | ✅ Completado |
+| 8 | Testing completo (129 tests) y Deploy | ✅ Completado |
 
 ## 💻 Acceso Local (Desarrollo)
 

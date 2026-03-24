@@ -4,7 +4,7 @@
 
 **Nombre del Proyecto:** Plataforma de Enseñanza Bíblica (FPCD)  
 **Fecha de Inicio:** 6 de Febrero, 2026  
-**Estado:** En desarrollo activo (Sprint 7)
+**Estado:** Desplegado en producción (Sprint 8 completado)
 **Tecnologías:** Django 5.0.1, PostgreSQL 15 (Docker), Redis 7, Celery, TailwindCSS, TinyMCE
 
 ---
@@ -141,6 +141,9 @@ Crear una plataforma web intuitiva y accesible para compartir contenido bíblico
 │  │  - content (artículos, blog, etc)    │   │
 │  │  - media (imágenes, archivos)        │   │
 │  │  - workflow (revisión)               │   │
+│  │  - comments (comentarios)            │   │
+│  │  - newsletter (suscripciones)        │   │
+│  │  - analytics (estadísticas)          │   │
 │  └──────────────────────────────────────┘   │
 └──────────────────┬──────────────────────────┘
                    │
@@ -258,17 +261,22 @@ Utilizaremos un enfoque **iterativo e incremental**, dividiendo el desarrollo en
 - ✅ Detalle de artículo público con sección de comentarios
 - ✅ 13 tests de vistas (13/13 pasan)
 
-#### **Sprint 7: Newsletter y Estadísticas 🔄 EN PROGRESO**
-- Sistema de suscripción
-- Envío de newsletters con Celery
-- Contador de visitas
-- Dashboard de estadísticas
+#### **Sprint 7: Newsletter y Estadísticas ✅ COMPLETADO (Marzo 24, 2026)**
+- Sistema de suscripción con `Subscriber` model
+- Formulario de signup en portal público
+- Modelo `Newsletter` y `NewsletterArchive` para boletines
+- Contador de visitas por artículo (`PageView`, `DailyStats`, `ContentStats`)
+- Middleware de tracking automático
+- Dashboard de estadísticas para admins
+- 17 tests implementados
 
-#### **Sprint 8: Pulido y Testing ⏳ PENDIENTE**
-- Suite completa de tests
+#### **Sprint 8: Testing y Deploy ✅ COMPLETADO (Marzo 24, 2026)**
+- Suite completa de tests: **129 tests** (112+ pasando)
 - Corrección de bugs
 - Optimización de rendimiento
-- Deploy a Dokploy (https://platform.kooperlab.cloud/)
+- Deploy a Dokploy: https://fecadadia.com
+- Configuración Docker completa (db, redis, web)
+- SSL/HTTPS configurado con Let's Encrypt
 
 **DURACIÓN TOTAL ESTIMADA: 10-16 semanas**
 

@@ -245,11 +245,66 @@ templates/
   - created_at, updated_at
 ```
 
-**Funcionalidades** (50% completado):
+**Funcionalidades** (100% completado):
 - ✅ Modelo y migraciones
-- ⏳ Vistas de comentarios y moderación
-- ⏳ Templates
-- ⏳ Tests
+- ✅ Vistas de comentarios y moderación
+- ✅ Templates
+- ✅ Tests (13 tests)
+
+#### 6. **newsletter/** - Newsletter y Suscripciones
+
+```python
+# Modelos principales
+- Subscriber
+  - email, first_name (unique)
+  - is_active, is_verified
+  - verification_token
+  - subscribed_at, unsubscribed_at
+
+- Newsletter
+  - subject, content, content_html
+  - status (draft, scheduled, sent, cancelled)
+  - scheduled_for, sent_at
+  - recipient_count, open_count, click_count
+  - created_by
+
+- NewsletterArchive
+  - Archivo de boletines enviados
+```
+
+**Funcionalidades** (100% completado):
+- ✅ Formulario de suscripción
+- ✅ Modelo Subscriber con verificación
+- ✅ Gestión de boletines
+- ✅ Tests (8 tests)
+
+#### 7. **analytics/** - Estadísticas y Visitas
+
+```python
+# Modelos principales
+- PageView
+  - content_type, object_id (GenericForeignKey)
+  - user, session_key
+  - ip_address, user_agent, referrer
+  - viewed_at (con índices)
+
+- DailyStats
+  - date (unique)
+  - total_views, unique_visitors
+  - article_views, devotional_views, study_views, blog_views
+
+- ContentStats
+  - content_type, object_id (GenericForeignKey)
+  - total_views, unique_views
+  - last_viewed
+```
+
+**Funcionalidades** (100% completado):
+- ✅ Middleware de tracking automático
+- ✅ Estadísticas diarias agregadas
+- ✅ Estadísticas por contenido
+- ✅ Dashboard de estadísticas
+- ✅ Tests (9 tests)
 
 ---
 
