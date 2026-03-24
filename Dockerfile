@@ -35,8 +35,11 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Copy application code
 COPY . /app/
 
+# Set working directory to Django project root
+WORKDIR /app/fpcd_project
+
 # Create directories needed
-RUN mkdir -p /app/staticfiles /app/media
+RUN mkdir -p /app/fpcd_project/staticfiles /app/fpcd_project/media
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
@@ -44,15 +47,15 @@ USER appuser
 
 # Environment variables
 ENV PYTHONUNBUFFERED=1
-ENV DJANGO_SETTINGS_MODULE=config.settings
-ENV PYTHONPATH=/app
+ENV DJANGO_SETTINGS_MODULE=config.settings.production
+ENV PYTHONPATH=/app/fpcd_project
 
 # Expose port
 EXPOSE 8000
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/')" || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/admin/login/')" || exit 1
 
 # Run with gunicorn
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "4", "--timeout", "120", "config.wsgi:application"]
