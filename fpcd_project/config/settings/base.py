@@ -195,7 +195,7 @@ TINYMCE_DEFAULT_CONFIG = {
 }
 
 # Email Configuration
-EMAIL_BACKEND = env("EMAIL_BACKEND")
+EMAIL_BACKEND = env("EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
 
 # Celery Configuration
 CELERY_BROKER_URL = env("REDIS_URL")
