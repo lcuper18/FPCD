@@ -7,9 +7,9 @@ from .base import *
 DEBUG = True
 
 # Django Debug Toolbar
-INSTALLED_APPS += ['debug_toolbar']
+INSTALLED_APPS = INSTALLED_APPS + ['debug_toolbar']
 
-MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
 
 INTERNAL_IPS = [
     '127.0.0.1',

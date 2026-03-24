@@ -1,7 +1,9 @@
 """
-Por defecto, usar configuración de desarrollo.
-Para producción, establecer la variable de entorno:
-export DJANGO_SETTINGS_MODULE=config.settings.production
-"""
+Seleccionar configuración mediante la variable de entorno DJANGO_SETTINGS_MODULE.
 
-from .development import *
+Desarrollo:  export DJANGO_SETTINGS_MODULE=config.settings.development
+Producción:  export DJANGO_SETTINGS_MODULE=config.settings.production
+
+No importar ningún módulo aquí para evitar que los paquetes de desarrollo
+(debug_toolbar, etc.) contaminen la importación de producción.
+"""
