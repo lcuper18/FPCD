@@ -4,27 +4,71 @@ services:
   db:
     image: postgres:15-alpine
     container_name: fpcd_postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: fpcd_db
-      POSTGRES_USER: fpcd_user
-      POSTGRES_PASSWORD: fpcd_secure_password_2026
+      POSTGRES_DB: ${DB_NAME:-fpcd_db}
+      POSTGRES_USER: ${DB_USER:-fpcd_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-fpcd_secure_password_2026}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     networks:
       - fpcd_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-fpcd_user} -d ${DB_NAME:-fpcd_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7-alpine
     container_name: fpcd_redis
-    ports:
-      - "6379:6379"
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
     networks:
       - fpcd_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    container_name: fpcd_web
+    restart: unless-stopped
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             gunicorn --bind 0.0.0.0:8000 --workers 4 --timeout 120 config.wsgi:application"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=${DB_NAME:-fpcd_db}
+      - DB_USER=${DB_USER:-fpcd_user}
+      - DB_PASSWORD=${DB_PASSWORD:-fpcd_secure_password_2026}
+      - DB_PORT=5432
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=False
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost}
+    volumes:
+      - static_files:/app/staticfiles
+      - media_files:/app/media
+    ports:
+      - "8000:8000"
+    networks:
+      - fpcd_network
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
 volumes:
   postgres_data:
+  redis_data:
+  static_files:
+  media_files:
 
 networks:
   fpcd_network:

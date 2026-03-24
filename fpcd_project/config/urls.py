@@ -8,8 +8,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from apps.content.views_public import HomeView
+from .views_health import health_check
 
 urlpatterns = [
+    # Health check endpoint for load balancers
+    path("health/", health_check, name="health_check"),
     path("admin/", admin.site.urls),
     path("tinymce/", include("tinymce.urls")),
     path("accounts/", include("apps.accounts.urls", namespace="accounts")),

@@ -1,0 +1,27 @@
+# Django
+Django>=5.0,<6.0
+
+# Database
+psycopg2-binary>=2.9.9
+
+# Redis
+redis>=5.0.0
+
+# Django extensions
+django-environ>=0.11.0
+
+# Crispy Forms
+crispy-tailwind>=5.1.0
+django-crispy-forms>=2.0
+
+# TinyMCE
+django-tinymce>=4.0.0
+
+# Tagging
+django-taggit>=5.0.0
+
+# Production server
+gunicorn>=21.0.0
+
+# Celery for async tasks
+celery>=5.3.0
