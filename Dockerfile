@@ -32,8 +32,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Copy application code
-COPY fpcd_project/ ./fpcd_project/
+# Copy application code directly to WORKDIR (manage.py queda en /app/manage.py)
+COPY fpcd_project/ .
+
+# Create directories needed
+RUN mkdir -p /app/staticfiles /app/media
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app

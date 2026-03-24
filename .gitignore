@@ -39,3 +39,8 @@ docker-compose.override.yml
 # Node (para Tailwind)
 node_modules/
 package-lock.json
+
+# Agentes y configuraciones locales
+.agents/
+.github/
+opencode.json
