@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Editar perfil | FPCD{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Editar perfil</h1>
+        <p class="mt-2 text-gray-600">Actualiza tu información personal</p>
+    </div>
+    
+    <form method="post" enctype="multipart/form-data" class="space-y-8">
+        {% csrf_token %}
+        
+        <!-- Información básica -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-6">Información personal</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="id_first_name" class="block text-sm font-medium text-gray-700">Nombre</label>
+                    <input type="text" name="first_name" id="id_first_name" value="{{ user.first_name }}"
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    {% if form.first_name.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.first_name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="id_last_name" class="block text-sm font-medium text-gray-700">Apellido</label>
+                    <input type="text" name="last_name" id="id_last_name" value="{{ user.last_name }}"
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    {% if form.last_name.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.last_name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div class="md:col-span-2">
+                    <label for="id_email" class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+                    <input type="email" name="email" id="id_email" value="{{ user.email }}" readonly
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
+                    <p class="mt-1 text-xs text-gray-500">El correo electrónico no se puede modificar</p>
+                </div>
+                
+                <div class="md:col-span-2">
+                    <label for="id_bio" class="block text-sm font-medium text-gray-700">Biografía</label>
+                    <textarea name="bio" id="id_bio" rows="4"
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Cuéntanos sobre ti...">{{ user.bio|default:"" }}</textarea>
+                    {% if form.bio.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.bio.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="id_phone" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                    <input type="text" name="phone" id="id_phone" value="{{ user.phone|default:"" }}"
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="+52 555 123 4567">
+                    {% if form.phone.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.phone.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="id_avatar" class="block text-sm font-medium text-gray-700">Avatar</label>
+                    <div class="mt-1 flex items-center">
+                        <div class="flex-shrink-0">
+                            {% if user.avatar %}
+                            <img src="{{ user.avatar.url }}" alt="Avatar actual" class="h-12 w-12 rounded-full object-cover">
+                            {% else %}
+                            <div class="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                <span class="text-lg font-bold text-blue-600">{{ user.first_name.0|default:user.email.0|upper }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="ml-4">
+                            <input type="file" name="avatar" id="id_avatar" accept="image/*"
+                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        </div>
+                    </div>
+                    {% if form.avatar.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.avatar.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Información adicional -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-6">Información adicional</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="id_location" class="block text-sm font-medium text-gray-700">Ubicación</label>
+                    <input type="text" name="location" id="id_location" value="{{ profile.location|default:"" }}"
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Ciudad, País">
+                </div>
+                
+                <div>
+                    <label for="id_website" class="block text-sm font-medium text-gray-700">Sitio web</label>
+                    <input type="url" name="website" id="id_website" value="{{ profile.website|default:"" }}"
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="https://tusitio.com">
+                </div>
+                
+                <div class="md:col-span-2">
+                    <div class="flex items-center">
+                        <input type="checkbox" name="notifications_enabled" id="id_notifications_enabled" 
+                            {% if profile.notifications_enabled %}checked{% endif %}
+                            class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="id_notifications_enabled" class="ml-2 block text-sm text-gray-700">
+                            Recibir notificaciones por correo electrónico
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Botones -->
+        <div class="flex justify-end space-x-4">
+            <a href="{% url 'accounts:profile' %}" 
+                class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition duration-200">
+                Cancelar
+            </a>
+            <button type="submit" 
+                class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition duration-200">
+                Guardar cambios
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

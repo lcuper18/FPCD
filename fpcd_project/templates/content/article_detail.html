@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ article.title }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<article class="container mx-auto px-4 py-8 max-w-4xl">
+    <!-- Article Header -->
+    <header class="mb-8">
+        <div class="flex items-center gap-2 mb-4">
+            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-{{ article.get_status_display_class }}-100 text-{{ article.get_status_display_class }}-800">
+                {{ article.get_status_display }}
+            </span>
+            {% if article.category %}
+            <a href="{% url 'content:category' article.category.slug %}" class="text-sm text-blue-600 hover:text-blue-800">
+                {{ article.category.name }}
+            </a>
+            {% endif %}
+        </div>
+        
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">{{ article.title }}</h1>
+        {% if article.subtitle %}
+            <p class="text-xl text-gray-600 mb-4">{{ article.subtitle }}</p>
+        {% endif %}
+        
+        <div class="flex items-center gap-4 text-gray-500 text-sm">
+            <span>{% trans "Por" %} <a href="#" class="text-blue-600 hover:text-blue-800">{{ article.author.get_full_name }}</a></span>
+            <span>•</span>
+            <span>{{ article.published_at|date:"d F, Y"|default:article.created_at|date:"d F, Y" }}</span>
+            <span>•</span>
+            <span>{{ article.read_time }} {% trans "min de lectura" %}</span>
+        </div>
+    </header>
+
+    <!-- Featured Image -->
+    {% if article.featured_image %}
+    <figure class="mb-8">
+        <img src="{{ article.featured_image.url }}" alt="{{ article.title }}" class="w-full rounded-lg shadow-lg">
+    </figure>
+    {% endif %}
+
+    <!-- Article Content -->
+    <div class="prose prose-lg max-w-none">
+        {{ article.content|safe }}
+    </div>
+
+    <!-- Tags -->
+    {% if article.tags %}
+    <div class="mt-8 pt-8 border-t border-gray-200">
+        <div class="flex flex-wrap gap-2">
+            {% for tag in article.tags.all %}
+            <a href="#" class="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-sm hover:bg-gray-200">
+                #{{ tag.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Share Buttons -->
+    <div class="mt-8 flex gap-4">
+        <span class="text-gray-600">{% trans "Compartir:" %}</span>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" class="text-blue-600 hover:text-blue-800">
+            Facebook
+        </a>
+        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ article.title }}" target="_blank" class="text-blue-400 hover:text-blue-600">
+            Twitter
+        </a>
+        <a href="https://wa.me/?text={{ article.title }} - {{ request.build_absolute_uri }}" target="_blank" class="text-green-600 hover:text-green-800">
+            WhatsApp
+        </a>
+    </div>
+</article>
+{% endblock %}

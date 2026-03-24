@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Biblioteca de Medios" %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">{% trans "Biblioteca de Medios" %}</h1>
+        <a href="{% url 'media_manager:upload' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">
+            + {% trans "Subir Archivo" %}
+        </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white rounded-lg shadow p-4 text-center">
+            <p class="text-2xl font-bold text-gray-800">{{ total_files }}</p>
+            <p class="text-sm text-gray-500">{% trans "Total Archivos" %}</p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 text-center">
+            <p class="text-2xl font-bold text-blue-600">{{ total_images }}</p>
+            <p class="text-sm text-gray-500">{% trans "Imágenes" %}</p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 text-center">
+            <p class="text-2xl font-bold text-red-600">{{ total_documents }}</p>
+            <p class="text-sm text-gray-500">{% trans "Documentos" %}</p>
+        </div>
+        <div class="bg-white rounded-lg shadow p-4 text-center">
+            <p class="text-2xl font-bold text-purple-600">{{ folders|length }}</p>
+            <p class="text-sm text-gray-500">{% trans "Carpetas" %}</p>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow p-4 mb-6">
+        <form method="get" class="flex gap-4 flex-wrap">
+            <div class="flex-1 min-w-[200px]">
+                <input type="text" name="search" value="{{ request.GET.search|default:'' }}" 
+                       placeholder="{% trans 'Buscar archivos...' %}"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+            </div>
+            <select name="file_type" class="px-4 py-2 border border-gray-300 rounded-lg">
+                <option value="">{% trans "Todos los tipos" %}</option>
+                <option value="image" {% if request.GET.file_type == 'image' %}selected{% endif %}>{% trans "Imágenes" %}</option>
+                <option value="document" {% if request.GET.file_type == 'document' %}selected{% endif %}>{% trans "Documentos" %}</option>
+                <option value="video" {% if request.GET.file_type == 'video' %}selected{% endif %}>{% trans "Videos" %}</option>
+                <option value="audio" {% if request.GET.file_type == 'audio' %}selected{% endif %}>{% trans "Audio" %}</option>
+            </select>
+            <button type="submit" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">
+                {% trans "Buscar" %}
+            </button>
+        </form>
+    </div>
+
+    <!-- Files Grid -->
+    {% if files %}
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {% for file in files %}
+        <div class="bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition">
+            <a href="{% url 'media_manager:detail' file.pk %}" class="block">
+                {% if file.file_type == 'image' and file.file %}
+                    <div class="h-32 bg-gray-100 flex items-center justify-center overflow-hidden">
+                        <img src="{{ file.file.url }}" alt="{{ file.filename }}" class="object-cover w-full h-full">
+                    </div>
+                {% else %}
+                    <div class="h-32 bg-gray-100 flex items-center justify-center">
+                        <span class="text-4xl text-gray-400">
+                            {% if file.file_type == 'document' %}📄{% elif file.file_type == 'video' %}🎬{% elif file.file_type == 'audio' %}🎵{% else %}📁{% endif %}
+                        </span>
+                    </div>
+                {% endif %}
+                <div class="p-3">
+                    <p class="text-sm font-medium text-gray-800 truncate">{{ file.filename }}</p>
+                    <p class="text-xs text-gray-500">{{ file.get_file_size_display }}</p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if files.has_other_pages %}
+    <div class="mt-6 flex justify-center">
+        <div class="flex gap-2">
+            {% if files.has_previous %}
+            <a href="?page={{ files.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.file_type %}&file_type={{ request.GET.file_type }}{% endif %}" 
+               class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">←</a>
+            {% endif %}
+            <span class="px-3 py-1">{{ files.number }} / {{ files.paginator.num_pages }}</span>
+            {% if files.has_next %}
+            <a href="?page={{ files.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.file_type %}&file_type={{ request.GET.file_type }}{% endif %}" 
+               class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">→</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="bg-white rounded-lg shadow p-8 text-center">
+        <p class="text-gray-500 text-lg mb-4">{% trans "No hay archivos en la biblioteca." %}</p>
+        <a href="{% url 'media_manager:upload' %}" class="text-blue-600 hover:text-blue-800">
+            {% trans "Subir el primer archivo" %}
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

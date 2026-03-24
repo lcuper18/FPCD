@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Cola de Revisión" %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-8">{% trans "Cola de Revisión" %}</h1>
+
+    {% if not pending_articles and not pending_devocionales and not pending_estudios and not pending_blog %}
+    <div class="bg-white rounded-lg shadow p-8 text-center">
+        <p class="text-gray-500 text-lg">{% trans "No hay contenido pendiente de revisión." %}</p>
+    </div>
+    {% else %}
+
+    <!-- Pending Articles -->
+    {% if pending_articles %}
+    <div class="mb-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">{% trans "Artículos" %} ({{ pending_articles.count }})</h2>
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{% trans "Título" %}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{% trans "Autor" %}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{% trans "Fecha" %}</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">{% trans "Acciones" %}</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for article in pending_articles %}
+                    <tr>
+                        <td class="px-6 py-4">
+                            <a href="{% url 'workflow:review_detail' 'article' article.pk %}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                {{ article.title }}
+                            </a>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500">{{ article.author.get_short_name }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">{{ article.created_at|date:"d/m/Y" }}</td>
+                        <td class="px-6 py-4 text-right">
+                            <a href="{% url 'workflow:review_detail' 'article' article.pk %}" class="text-blue-600 hover:text-blue-800">
+                                {% trans "Revisar" %} →
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Pending Devocionales -->
+    {% if pending_devocionales %}
+    <div class="mb-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">{% trans "Devocionales" %} ({{ pending_devocionales.count }})</h2>
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{% trans "Título" %}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{% trans "Autor" %}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{% trans "Versículo" %}</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">{% trans "Acciones" %}</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for devocional in pending_devocionales %}
+                    <tr>
+                        <td class="px-6 py-4">
+                            <a href="{% url 'workflow:review_detail' 'devocional' devocional.pk %}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                {{ devocional.title }}
+                            </a>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500">{{ devocional.author.get_short_name }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">{{ devocional.verse_reference }}</td>
+                        <td class="px-6 py-4 text-right">
+                            <a href="{% url 'workflow:review_detail' 'devocional' devocional.pk %}" class="text-blue-600 hover:text-blue-800">
+                                {% trans "Revisar" %} →
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Pending Estudios -->
+    {% if pending_estudios %}
+    <div class="mb-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">{% trans "Estudios Bíblicos" %} ({{ pending_estudios.count }})</h2>
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{% trans "Título" %}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{% trans "Autor" %}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{% trans "Referencia" %}</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">{% trans "Acciones" %}</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for estudio in pending_estudios %}
+                    <tr>
+                        <td class="px-6 py-4">
+                            <a href="{% url 'workflow:review_detail' 'estudiobiblico' estudio.pk %}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                {{ estudio.title }}
+                            </a>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500">{{ estudio.author.get_short_name }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">{{ estudio.get_bible_reference }}</td>
+                        <td class="px-6 py-4 text-right">
+                            <a href="{% url 'workflow:review_detail' 'estudiobiblico' estudio.pk %}" class="text-blue-600 hover:text-blue-800">
+                                {% trans "Revisar" %} →
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Pending Blog Posts -->
+    {% if pending_blog %}
+    <div class="mb-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">{% trans "Entradas de Blog" %} ({{ pending_blog.count }})</h2>
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{% trans "Título" %}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{% trans "Autor" %}</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">{% trans "Fecha" %}</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">{% trans "Acciones" %}</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for post in pending_blog %}
+                    <tr>
+                        <td class="px-6 py-4">
+                            <a href="{% url 'workflow:review_detail' 'blogpost' post.pk %}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                {{ post.title }}
+                            </a>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500">{{ post.author.get_short_name }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500">{{ post.created_at|date:"d/m/Y" }}</td>
+                        <td class="px-6 py-4 text-right">
+                            <a href="{% url 'workflow:review_detail' 'blogpost' post.pk %}" class="text-blue-600 hover:text-blue-800">
+                                {% trans "Revisar" %} →
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
+    {% endif %}
+</div>
+{% endblock %}

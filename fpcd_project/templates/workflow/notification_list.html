@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Notificaciones" %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">{% trans "Notificaciones" %}</h1>
+        {% if unread_count > 0 %}
+        <form method="post" action="{% url 'workflow:notifications_read_all' %}">
+            {% csrf_token %}
+            <button type="submit" class="text-blue-600 hover:text-blue-800 text-sm">
+                {% trans "Marcar todas como leídas" %}
+            </button>
+        </form>
+        {% endif %}
+    </div>
+
+    {% if notifications %}
+    <div class="bg-white rounded-lg shadow divide-y divide-gray-200">
+        {% for notification in notifications %}
+        <div class="p-4 hover:bg-gray-50 {% if not notification.is_read %}bg-blue-50{% endif %}">
+            <div class="flex items-start justify-between">
+                <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                        {% if not notification.is_read %}
+                        <span class="w-2 h-2 bg-blue-600 rounded-full"></span>
+                        {% endif %}
+                        <h3 class="font-medium text-gray-900">{{ notification.title }}</h3>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-1">{{ notification.message }}</p>
+                    <p class="text-xs text-gray-400 mt-2">{{ notification.created_at|timesince }}</p>
+                </div>
+                <div class="ml-4">
+                    {% if notification.link %}
+                    <form method="post" action="{% url 'workflow:notification_read' notification.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="text-blue-600 hover:text-blue-800 text-sm">
+                            {% trans "Ver" %}
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if page_obj.has_other_pages %}
+    <div class="mt-4 flex justify-center">
+        <div class="flex gap-2">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-1 bg-gray-200 rounded">←</a>
+            {% endif %}
+            <span class="px-3 py-1">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-1 bg-gray-200 rounded">→</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="bg-white rounded-lg shadow p-8 text-center">
+        <p class="text-gray-500">{% trans "No tienes notificaciones." %}</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

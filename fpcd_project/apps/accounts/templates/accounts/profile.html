@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}Mi perfil | FPCD{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">Mi perfil</h1>
+        <p class="mt-2 text-gray-600">Gestiona tu información personal y preferencias</p>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Perfil principal -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Información básica -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-semibold text-gray-900">Información personal</h2>
+                    <a href="{% url 'accounts:profile_edit' %}" 
+                        class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        Editar
+                    </a>
+                </div>
+                
+                <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Nombre completo</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ user.get_full_name }}</dd>
+                    </div>
+                    
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Correo electrónico</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ user.email }}</dd>
+                    </div>
+                    
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Teléfono</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ user.phone|default:"No configurado" }}</dd>
+                    </div>
+                    
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Rol</dt>
+                        <dd class="mt-1">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                {% if user.role == 'admin' %}bg-purple-100 text-purple-800
+                                {% elif user.role == 'editor' %}bg-blue-100 text-blue-800
+                                {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                {{ user.get_role_display_name }}
+                            </span>
+                        </dd>
+                    </div>
+                    
+                    <div class="sm:col-span-2">
+                        <dt class="text-sm font-medium text-gray-500">Biografía</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ user.bio|default:"Sin biografía" }}</dd>
+                    </div>
+                </dl>
+            </div>
+            
+            <!-- Información adicional -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Información adicional</h2>
+                
+                <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Ubicación</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ profile.location|default:"No configurado" }}</dd>
+                    </div>
+                    
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Sitio web</dt>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            {% if profile.website %}
+                            <a href="{{ profile.website }}" target="_blank" class="text-blue-600 hover:text-blue-800">
+                                {{ profile.website }}
+                            </a>
+                            {% else %}
+                            No configurado
+                            {% endif %}
+                        </dd>
+                    </div>
+                    
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Miembro desde</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ user.created_at|date:"d F, Y" }}</dd>
+                    </div>
+                    
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">Notificaciones</dt>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            {% if profile.notifications_enabled %}
+                            <span class="text-green-600">Activas</span>
+                            {% else %}
+                            <span class="text-gray-500">Inactivas</span>
+                            {% endif %}
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+        
+        <!-- Barra lateral -->
+        <div class="space-y-6">
+            <!-- Avatar -->
+            <div class="bg-white shadow rounded-lg p-6 text-center">
+                <div class="relative inline-block">
+                    {% if user.avatar %}
+                    <img src="{{ user.avatar.url }}" alt="{{ user.get_full_name }}" 
+                        class="h-32 w-32 rounded-full mx-auto object-cover">
+                    {% else %}
+                    <div class="h-32 w-32 rounded-full mx-auto bg-blue-100 flex items-center justify-center">
+                        <span class="text-4xl font-bold text-blue-600">
+                            {{ user.first_name.0|default:user.email.0|upper }}
+                        </span>
+                    </div>
+                    {% endif %}
+                </div>
+                <h3 class="mt-4 text-lg font-medium text-gray-900">{{ user.get_full_name }}</h3>
+                <p class="text-sm text-gray-500">{{ user.email }}</p>
+            </div>
+            
+            <!-- Acciones -->
+            <div class="bg-white shadow rounded-lg p-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Acciones</h3>
+                <div class="space-y-3">
+                    <a href="{% url 'accounts:password_change' %}" 
+                        class="block w-full text-left px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        Cambiar contraseña
+                    </a>
+                    <a href="{% url 'accounts:profile_edit' %}" 
+                        class="block w-full text-left px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        Editar perfil
+                    </a>
+                    {% if user.is_admin %}
+                    <a href="{% url 'accounts:user_list' %}" 
+                        class="block w-full text-left px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        Gestionar usuarios
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% if object %}{% trans "Editar Artículo" %}{% else %}{% trans "Nuevo Artículo" %}{% endif %} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <h1 class="text-3xl font-bold text-gray-800 mb-8">
+        {% if object %}{% trans "Editar Artículo" %}{% else %}{% trans "Nuevo Artículo" %}{% endif %}
+    </h1>
+
+    <form method="post" enctype="multipart/form-data" class="bg-white rounded-lg shadow p-6">
+        {% csrf_token %}
+        
+        {% crispy form %}
+
+        <div class="flex justify-between mt-6 pt-6 border-t border-gray-200">
+            <a href="{% url 'content:article_list' %}" class="text-gray-600 hover:text-gray-800">{% trans "Cancelar" %}</a>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition">
+                {% trans "Guardar" %}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

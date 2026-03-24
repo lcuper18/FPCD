@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Cambiar rol | FPCD{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div class="bg-white shadow rounded-lg p-8">
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold text-gray-900">Cambiar rol de usuario</h1>
+            <p class="mt-2 text-gray-600">{{ object.email }}</p>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="space-y-4 mb-6">
+                {% for radio in form.role %}
+                <div class="relative flex items-start">
+                    <div class="flex items-center h-5">
+                        {{ radio.tag }}
+                    </div>
+                    <div class="ml-3 text-sm">
+                        <label for="{{ radio.id_for_label }}" class="font-medium text-gray-700">
+                            {{ radio.choice_label }}
+                        </label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="flex space-x-4">
+                <a href="{% url 'accounts:user_list' %}" 
+                    class="flex-1 text-center py-3 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50">
+                    Cancelar
+                </a>
+                <button type="submit" 
+                    class="flex-1 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700">
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
